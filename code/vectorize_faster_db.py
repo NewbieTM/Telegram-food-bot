@@ -12,6 +12,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
 from langchain_community.vectorstores import Chroma
 
+# Настройка логирования
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(message)s',
@@ -21,12 +22,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
-
 CHROMA_PATH = "../db/chroma"
 DATA_PATH = "../db/data.txt"
-BATCH_SIZE = 1000
-MAX_WORKERS = 4
+BATCH_SIZE = 1000  # Размер батча для обработки
+MAX_WORKERS = 4  # Количество потоков для параллельной обработки
 
 
 def get_embedding_function():
@@ -37,8 +36,9 @@ def get_embedding_function():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.info(f"Используем устройство для эмбеддингов: {device}")
 
+    # Передаём device через model_kwargs
     embeddings = HuggingFaceEmbeddings(
-        model_name="DeepPavlov/rubert-base-cased-sentence-transformer",
+        model_name="sberbank-ai/sbert_large_nlu_ru",
         model_kwargs={"device": device}
     )
     return embeddings
